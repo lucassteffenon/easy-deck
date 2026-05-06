@@ -21,7 +21,7 @@
   --border: rgba(255,255,255,0.07);
   --border2: rgba(255,255,255,0.13);
   --text: #e8e8f0;
-  --text-muted: #5a5a72;
+  --text-muted: #e8e8f0;
   --text-dim: #3a3a52;
   --accent: #6c63ff;
   --accent-glow: rgba(108,99,255,0.3);
@@ -82,7 +82,7 @@ html, body {
 .connect-label {
   font-size: 11px;
   font-family: 'JetBrains Mono', monospace;
-  color: var(--text-dim);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 4px;
@@ -169,18 +169,6 @@ html, body {
   flex-shrink: 0;
 }
 .header-conn-dot.offline { background: var(--danger); }
-.edit-toggle-btn {
-  padding: 5px 12px;
-  background: none;
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  color: var(--text-muted);
-  font-size: 11px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-}
-.edit-toggle-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
 /* ─── Page tabs ─────────────────────────────────────── */
 #page-tabs {
@@ -227,9 +215,9 @@ html, body {
   min-height: 0;
   width: 100%;
   overflow-y: auto;
-  padding: 8px 12px;
+  padding: 10px 12px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
   align-content: start;
   overscroll-behavior: contain;
@@ -238,12 +226,12 @@ html, body {
 
 @media (orientation: landscape) and (max-height: 520px) {
   #btn-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap: 7px;
     padding: 6px 10px;
   }
-  .btn-icon { font-size: 22px; }
-  .btn-label { font-size: 9px; }
+  .btn-icon { font-size: 26px; }
+  .btn-label { font-size: 10px; }
   #deck-header { padding: 6px 16px 0; }
   #page-tabs { padding: 6px 16px 4px; }
 }
@@ -289,23 +277,20 @@ html, body {
 .deck-btn.ok-flash { border-color: var(--success) !important; }
 .deck-btn.err-flash { border-color: var(--danger) !important; }
 
-/* Edit mode wiggle */
-.edit-mode .deck-btn { animation: wiggle 0.4s ease infinite alternate; }
-.edit-mode .deck-btn:nth-child(2n) { animation-delay: 0.1s; }
-.edit-mode .deck-btn:nth-child(3n) { animation-delay: 0.2s; }
-@keyframes wiggle {
-  from { transform: rotate(-0.8deg); }
-  to { transform: rotate(0.8deg); }
+/* Long press indicator */
+.deck-btn.pressing {
+  transform: scale(0.93);
+  border-color: rgba(108,99,255,0.5);
+  transition: transform 0.4s ease, border-color 0.4s ease;
 }
-.edit-mode .deck-btn:active { animation: none; transform: scale(0.95); }
 
-.btn-icon { font-size: 30px; line-height: 1; pointer-events: none; }
+.btn-icon { font-size: 40px; line-height: 1; pointer-events: none; }
 .btn-label {
-  font-size: 10px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.80);
   text-align: center;
-  padding: 0 4px;
+  padding: 0 8px;
   line-height: 1.3;
   pointer-events: none;
   max-width: 100%;
@@ -321,22 +306,6 @@ html, body {
   color: rgba(255,255,255,0.2);
   text-transform: uppercase;
 }
-.btn-edit-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.edit-mode .deck-btn .btn-edit-overlay { opacity: 1; }
-.edit-mode .deck-btn:active .btn-edit-overlay { opacity: 0; }
-.btn-edit-icon { font-size: 20px; }
-.btn-edit-text { font-size: 9px; font-family: 'JetBrains Mono', monospace; color: rgba(255,255,255,0.6); }
 
 /* Add button */
 .deck-btn-add {
@@ -429,9 +398,9 @@ html, body {
 .sheet-body::-webkit-scrollbar { display: none; }
 
 .field-label {
-  font-size: 10px;
+  font-size: 11px;
   font-family: 'JetBrains Mono', monospace;
-  color: var(--text-dim);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 6px;
@@ -515,13 +484,13 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
 .color-dot:active { transform: scale(1.2); }
 
 .action-hint {
-  font-size: 11px;
+  font-size: 12px;
   font-family: 'JetBrains Mono', monospace;
-  color: var(--text-dim);
-  background: var(--bg);
+  color: var(--text-muted);
+  background: var(--surface2);
   border-radius: 8px;
-  padding: 10px;
-  line-height: 1.7;
+  padding: 10px 12px;
+  line-height: 1.8;
   white-space: pre-wrap;
 }
 
@@ -582,7 +551,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
     <div class="header-logo">Macro<span>Deck</span></div>
     <div class="header-host" id="header-host"></div>
     <div class="header-conn-dot" id="conn-dot"></div>
-    <button class="edit-toggle-btn" id="edit-btn" onclick="toggleEdit()">Editar</button>
   </div>
 
   <div id="page-tabs"></div>
@@ -652,7 +620,8 @@ let config = { pages: [], currentPage: '' }
 let currentPageId = ''
 let editingId = null
 let editIcon = '⚡'
-let editMode = false
+let lpTimer = null
+let lpFired = false
 
 const ICONS = ['💻','🌐','🔊','🔇','🎵','🎬','🔴','📸','🔒','⚡','🚀','📋','📁','💾','🖥','⌨','🖱','📡','🔧','🎮','🎯','📊','📈','🔔','💬','✉','🏠','⭐','❤','🔥','🌙','☀','🎉','🤖','👾','🛡','⚙','🔑','🗑','➕','⏯','⏭','⏮','🔁','🔀']
 
@@ -673,6 +642,7 @@ const ACTION_HINTS = {
 function init() {
   buildIconGrid()
   buildColorPresets()
+  setupLongPress()
   const saved = localStorage.getItem('macrodeck-server')
   if (saved) document.getElementById('server-url').value = saved
   document.getElementById('server-url').addEventListener('keydown', e => {
@@ -748,23 +718,15 @@ function renderTabs() {
 
 function renderGrid() {
   const grid = document.getElementById('btn-grid')
-  grid.className = editMode ? 'edit-mode' : ''
-  grid.id = 'btn-grid'
   const page = currentPage()
   if (!page) return
 
   grid.innerHTML = page.buttons.map(btn => `
-    <div class="deck-btn" id="dbtn-${btn.id}"
-      style="--btn-bg: ${btn.color || '#16161f'}"
-      ontouchstart=""
-      onclick="onBtnClick('${btn.id}')">
+    <div class="deck-btn" id="dbtn-${btn.id}" data-id="${btn.id}"
+      style="--btn-bg: ${btn.color || '#16161f'}">
       <div class="btn-icon">${btn.icon || '⚡'}</div>
       <div class="btn-label">${btn.label || ''}</div>
       <div class="btn-type-badge">${btn.action?.type || ''}</div>
-      <div class="btn-edit-overlay">
-        <div class="btn-edit-icon">✏️</div>
-        <div class="btn-edit-text">editar</div>
-      </div>
     </div>
   `).join('') + `
     <div class="deck-btn-add" onclick="addBtn()">
@@ -790,12 +752,8 @@ function addPage() {
 }
 
 // ─── Execute ─────────────────────────────────────────
-function onBtnClick(id) {
-  if (editMode) { openEditor(id); return }
-  executeBtn(id)
-}
-
 async function executeBtn(id) {
+  navigator.vibrate?.(30)
   const page = currentPage()
   const btn = page?.buttons.find(b => b.id === id)
   if (!btn) return
@@ -822,11 +780,52 @@ async function executeBtn(id) {
   }
 }
 
-// ─── Edit mode ───────────────────────────────────────
-function toggleEdit() {
-  editMode = !editMode
-  document.getElementById('edit-btn').classList.toggle('active', editMode)
-  renderGrid()
+// ─── Long press ──────────────────────────────────────
+function setupLongPress() {
+  const grid = document.getElementById('btn-grid')
+
+  grid.addEventListener('touchstart', e => {
+    const btn = e.target.closest('.deck-btn[data-id]')
+    if (!btn) return
+    lpFired = false
+    btn.classList.add('pressing')
+    lpTimer = setTimeout(() => {
+      lpFired = true
+      btn.classList.remove('pressing')
+      navigator.vibrate?.(60)
+      openEditor(btn.dataset.id)
+    }, 500)
+  }, { passive: true })
+
+  const cancel = e => {
+    clearTimeout(lpTimer)
+    e.target.closest?.('.deck-btn[data-id]')?.classList.remove('pressing')
+  }
+  grid.addEventListener('touchmove', cancel, { passive: true })
+  grid.addEventListener('touchcancel', cancel, { passive: true })
+
+  grid.addEventListener('touchend', e => {
+    clearTimeout(lpTimer)
+    const btn = e.target.closest('.deck-btn[data-id]')
+    if (!btn) return
+    btn.classList.remove('pressing')
+    if (lpFired) return
+    e.preventDefault()
+    executeBtn(btn.dataset.id)
+  }, { passive: false })
+
+  // desktop fallback
+  grid.addEventListener('click', e => {
+    if (lpFired) { lpFired = false; return }
+    const btn = e.target.closest('.deck-btn[data-id]')
+    if (btn) executeBtn(btn.dataset.id)
+  })
+  grid.addEventListener('contextmenu', e => {
+    const btn = e.target.closest('.deck-btn[data-id]')
+    if (!btn) return
+    e.preventDefault()
+    openEditor(btn.dataset.id)
+  })
 }
 
 // ─── Editor (bottom sheet) ───────────────────────────

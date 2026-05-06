@@ -11,7 +11,7 @@ python server.py
 
 O terminal vai mostrar o IP. Ex:
 ```
-Celular:    http://192.168.1.105:7777
+Celular:    http://192.168.1.105:8888
 ```
 
 Abra esse endereço no browser do celular (mesma rede Wi-Fi).
@@ -70,9 +70,9 @@ elif t == "minha_integracao":
 
 Se o celular não conectar:
 ```bash
-sudo ufw allow 7777
+sudo ufw allow 8888
 ```
 
 ## Firewall (Windows)
 
-Adicione regra de entrada na porta 7777 no Windows Defender Firewall.
+Adicione regra de entrada na porta 8888 no Windows Defender Firewall.
