@@ -1,0 +1,117 @@
+{
+  "pages": [
+    {
+      "id": "main",
+      "name": "Principal",
+      "buttons": [
+        {
+          "id": "1",
+          "label": "Bloco de notas",
+          "icon": "📝",
+          "color": "#1a1a2e",
+          "action": {
+            "type": "app",
+            "value": "notepad"
+          }
+        },
+        {
+          "id": "2",
+          "label": "Calculadora",
+          "icon": "🔢",
+          "color": "#0d1b2a",
+          "action": {
+            "type": "app",
+            "value": "calc"
+          }
+        },
+        {
+          "id": "3",
+          "label": "Volume +",
+          "icon": "🔊",
+          "color": "#1a2e1a",
+          "action": {
+            "type": "media",
+            "value": "volume_up"
+          }
+        },
+        {
+          "id": "4",
+          "label": "Volume -",
+          "icon": "🔇",
+          "color": "#2e1a1a",
+          "action": {
+            "type": "media",
+            "value": "volume_down"
+          }
+        },
+        {
+          "id": "5",
+          "label": "Play/Pause",
+          "icon": "⏯",
+          "color": "#2e2a0a",
+          "action": {
+            "type": "media",
+            "value": "play_pause"
+          }
+        },
+        {
+          "id": "6",
+          "label": "Próxima faixa",
+          "icon": "⏭",
+          "color": "#0a1a2e",
+          "action": {
+            "type": "media",
+            "value": "next_track"
+          }
+        },
+        {
+          "id": "7",
+          "label": "Lock Screen",
+          "icon": "🔒",
+          "color": "#1a0a2e",
+          "action": {
+            "type": "script",
+            "value": "rundll32.exe user32.dll,LockWorkStation"
+          }
+        },
+        {
+          "id": "8",
+          "label": "Screenshot",
+          "icon": "📸",
+          "color": "#0a2e1a",
+          "action": {
+            "type": "hotkey",
+            "value": "PrintScreen"
+          }
+        },
+        {
+          "id": "b_1778090958487",
+          "label": "Novo",
+          "icon": "⚡",
+          "color": "#16161f",
+          "action": {
+            "type": "none",
+            "value": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "p_1778090266557",
+      "name": "Nova",
+      "buttons": [
+        {
+          "id": "b_1778090268013",
+          "label": "Chrome",
+          "icon": "💻",
+          "color": "#16161f",
+          "action": {
+            "type": "app",
+            "value": "chrome"
+          }
+        }
+      ]
+    }
+  ],
+  "currentPage": "main"
+}
