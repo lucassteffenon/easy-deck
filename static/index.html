@@ -115,6 +115,7 @@ html, body {
 /* ─── Top bar ───────────────────────────────────────── */
 #top-bar {
   flex-shrink: 0;
+  position: relative;
   display: flex; flex-wrap: wrap; align-items: center;
   padding: 10px 16px 0; gap: 0 8px;
 }
@@ -123,12 +124,34 @@ html, body {
 .header-host { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; order: 1; }
 .header-conn-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex-shrink: 0; order: 2; }
 .header-conn-dot.offline { background: var(--danger); }
-.theme-toggle {
+.theme-toggle, .settings-toggle {
   background: none; border: 1px solid var(--border2); border-radius: 8px;
   color: var(--text-dim); cursor: pointer; padding: 3px 8px; font-size: 13px;
-  flex-shrink: 0; transition: all 0.15s; order: 3; line-height: 1.4;
+  flex-shrink: 0; transition: all 0.15s; line-height: 1.4;
 }
-.theme-toggle:active { background: var(--surface2); }
+.theme-toggle { order: 3; }
+.settings-toggle { order: 4; }
+.theme-toggle:active, .settings-toggle:active { background: var(--surface2); }
+.settings-toggle.active { background: var(--accent-dim); border-color: rgba(108,99,255,0.3); color: var(--accent); }
+
+.settings-panel {
+  position: absolute; top: calc(100% + 6px); right: 16px; z-index: 100;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 14px; padding: 14px 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  display: flex; flex-direction: column; gap: 10px;
+  min-width: 210px;
+}
+.settings-panel.hidden { display: none; }
+.settings-panel-title { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+.settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.settings-label { font-size: 13px; color: var(--text-muted); }
+.stepper { display: flex; align-items: center; gap: 8px; }
+.stepper-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border2); background: none; color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.1s; flex-shrink: 0; line-height: 1; }
+.stepper-btn:active { background: var(--surface2); }
+.stepper-val { font-size: 14px; font-family: 'JetBrains Mono', monospace; color: var(--accent); min-width: 28px; text-align: center; font-weight: 600; }
+.settings-reset-btn { margin-top: 2px; padding-top: 10px; border-top: 1px solid var(--border); width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: none; color: var(--text-dim); font-size: 11px; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.15s; }
+.settings-reset-btn:active { background: var(--surface2); }
 
 #page-tabs { flex: 0 0 100%; order: 4; display: flex; gap: 6px; padding: 10px 0 6px; overflow-x: auto; scrollbar-width: none; }
 #page-tabs::-webkit-scrollbar { display: none; }
@@ -142,6 +165,7 @@ html, body {
   #page-tabs { flex: 1; order: 2; padding: 0; min-width: 0; }
   .header-conn-dot { order: 3; }
   .theme-toggle { order: 4; }
+  .settings-toggle { order: 5; }
   .page-tab { padding: 4px 10px; font-size: 11px; }
   .page-tab-add { padding: 4px 8px; font-size: 12px; }
 }
@@ -373,7 +397,28 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
     <div class="header-host" id="header-host"></div>
     <div class="header-conn-dot" id="conn-dot"></div>
     <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀</button>
+    <button class="settings-toggle" id="settings-toggle" onclick="toggleSettings()">⊞</button>
     <div id="page-tabs"></div>
+    <div class="settings-panel hidden" id="settings-panel">
+      <div class="settings-panel-title">Colunas por linha</div>
+      <div class="settings-row">
+        <span class="settings-label">Celular</span>
+        <div class="stepper">
+          <button class="stepper-btn" onclick="changeGridCols('mobile',-1)">−</button>
+          <span class="stepper-val" id="mobile-cols-val">—</span>
+          <button class="stepper-btn" onclick="changeGridCols('mobile',+1)">+</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label">Desktop</span>
+        <div class="stepper">
+          <button class="stepper-btn" onclick="changeGridCols('desktop',-1)">−</button>
+          <span class="stepper-val" id="desktop-cols-val">—</span>
+          <button class="stepper-btn" onclick="changeGridCols('desktop',+1)">+</button>
+        </div>
+      </div>
+      <button class="settings-reset-btn" onclick="resetGridCols()">restaurar padrão</button>
+    </div>
   </div>
   <div id="btn-grid"></div>
 </div>
@@ -483,8 +528,18 @@ function init() {
     if (e.key === 'Enter') tryConnect()
   })
 
-  window.addEventListener('resize', updateGridRowHeight)
-  window.addEventListener('orientationchange', () => setTimeout(updateGridRowHeight, 150))
+  window.addEventListener('resize', applyGridCols)
+  window.addEventListener('orientationchange', () => setTimeout(applyGridCols, 150))
+
+  document.addEventListener('click', e => {
+    const panel = document.getElementById('settings-panel')
+    const btn = document.getElementById('settings-toggle')
+    if (!panel || panel.classList.contains('hidden')) return
+    if (!panel.contains(e.target) && !btn.contains(e.target)) {
+      panel.classList.add('hidden')
+      btn.classList.remove('active')
+    }
+  }, true)
 }
 
 // ─── Theme ───────────────────────────────────────────
@@ -499,6 +554,60 @@ function toggleTheme() {
   const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
   applyTheme(next)
   localStorage.setItem('easydeck-theme', next)
+}
+
+// ─── Grid columns ────────────────────────────────────
+function applyGridCols() {
+  const grid = document.getElementById('btn-grid')
+  if (!grid) return
+  const isLandscape = window.matchMedia('(orientation: landscape) and (max-height: 520px)').matches
+  if (!isLandscape) {
+    const isDesktop = window.innerWidth >= 1024
+    const key = isDesktop ? 'easydeck-cols-desktop' : 'easydeck-cols-mobile'
+    const val = +localStorage.getItem(key) || 0
+    grid.style.gridTemplateColumns = val ? `repeat(${val}, 1fr)` : ''
+  } else {
+    grid.style.gridTemplateColumns = ''
+  }
+  updateGridRowHeight()
+}
+
+function changeGridCols(ctx, delta) {
+  const key = ctx === 'mobile' ? 'easydeck-cols-mobile' : 'easydeck-cols-desktop'
+  const defaults = { mobile: 3, desktop: 5 }
+  const max = ctx === 'mobile' ? 8 : 10
+  const cur = +localStorage.getItem(key) || defaults[ctx]
+  const next = Math.max(2, Math.min(max, cur + delta))
+  localStorage.setItem(key, next)
+  applyGridCols()
+  updateSettingsDisplay()
+}
+
+function resetGridCols() {
+  localStorage.removeItem('easydeck-cols-mobile')
+  localStorage.removeItem('easydeck-cols-desktop')
+  const grid = document.getElementById('btn-grid')
+  if (grid) grid.style.gridTemplateColumns = ''
+  updateGridRowHeight()
+  updateSettingsDisplay()
+}
+
+function updateSettingsDisplay() {
+  const mobile = +localStorage.getItem('easydeck-cols-mobile') || 0
+  const desktop = +localStorage.getItem('easydeck-cols-desktop') || 0
+  const mv = document.getElementById('mobile-cols-val')
+  const dv = document.getElementById('desktop-cols-val')
+  if (mv) mv.textContent = mobile || '—'
+  if (dv) dv.textContent = desktop || '—'
+}
+
+function toggleSettings() {
+  const panel = document.getElementById('settings-panel')
+  const btn = document.getElementById('settings-toggle')
+  const opening = panel.classList.contains('hidden')
+  panel.classList.toggle('hidden', !opening)
+  btn.classList.toggle('active', opening)
+  if (opening) updateSettingsDisplay()
 }
 
 // ─── Connect ─────────────────────────────────────────
@@ -579,7 +688,7 @@ function renderGrid() {
       <div class="deck-btn-add-icon">＋</div>
       <div class="deck-btn-add-text">novo</div>
     </div>`
-  updateGridRowHeight()
+  applyGridCols()
 }
 
 function updateGridRowHeight() {
