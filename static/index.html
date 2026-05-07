@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f">
-<title>MacroDeck</title>
+<title>EasyDeck</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
@@ -524,7 +524,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
 
 <!-- ─── Connect screen ─────────────────────────────── -->
 <div id="screen-connect" class="screen">
-  <div class="connect-logo">Macro<span>Deck</span></div>
+  <div class="connect-logo">Easy<span>Deck</span></div>
   <div class="connect-sub">controle remoto do seu PC</div>
 
   <div class="connect-card">
@@ -548,7 +548,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
 <!-- ─── Deck screen ────────────────────────────────── -->
 <div id="screen-deck" class="screen hidden">
   <div id="deck-header">
-    <div class="header-logo">Macro<span>Deck</span></div>
+    <div class="header-logo">Easy<span>Deck</span></div>
     <div class="header-host" id="header-host"></div>
     <div class="header-conn-dot" id="conn-dot"></div>
   </div>
@@ -643,7 +643,7 @@ function init() {
   buildIconGrid()
   buildColorPresets()
   setupLongPress()
-  const saved = localStorage.getItem('macrodeck-server')
+  const saved = localStorage.getItem('easydeck-server')
   if (saved) document.getElementById('server-url').value = saved
   document.getElementById('server-url').addEventListener('keydown', e => {
     if (e.key === 'Enter') tryConnect()
@@ -666,7 +666,7 @@ async function tryConnect() {
     if (!res.ok) throw new Error('Servidor retornou ' + res.status)
     config = await res.json()
     serverUrl = url
-    localStorage.setItem('macrodeck-server', url)
+    localStorage.setItem('easydeck-server', url)
     status.textContent = '✓ Conectado!'
     currentPageId = config.currentPage || config.pages[0]?.id
     setTimeout(() => goToDeck(), 600)

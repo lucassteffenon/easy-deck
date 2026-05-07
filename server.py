@@ -1,5 +1,5 @@
 """
-MacroDeck Server — Roda no PC, recebe comandos do celular via HTTP
+EasyDeck Server — Roda no PC, recebe comandos do celular via HTTP
 Execute: python server.py
 Acesse no celular: http://<IP-DO-PC>:7777
 """
@@ -27,7 +27,7 @@ SYSTEM = platform.system()  # Windows | Linux | Darwin
 
 CONFIG_DIR.mkdir(exist_ok=True)
 
-app = FastAPI(title="MacroDeck Server", version="1.0.0")
+app = FastAPI(title="EasyDeck Server", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -272,10 +272,10 @@ if __name__ == "__main__":
     port = 8888
     print(f"""
 ╔══════════════════════════════════════╗
-║         MacroDeck Server             ║
+║         EasyDeck Server              ║
 ╠══════════════════════════════════════╣
-║  PC local:   http://localhost:{port}   ║
-║  Celular:    http://{ip}:{port}  ║
+║  PC local:  http://localhost:{port}    ║
+║  Celular:   http://{ip}:{port}║
 ║                                      ║
 ║  Certifique-se que o celular está    ║
 ║  na mesma rede Wi-Fi!                ║

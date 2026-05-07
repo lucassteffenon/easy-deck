@@ -1,6 +1,6 @@
 {
-  "name": "MacroDeck",
-  "short_name": "MacroDeck",
+  "name": "EasyDeck",
+  "short_name": "EasyDeck",
   "description": "Controle remoto de macros para PC",
   "start_url": "/",
   "display": "standalone",

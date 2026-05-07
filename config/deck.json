@@ -93,6 +93,16 @@
             "type": "none",
             "value": ""
           }
+        },
+        {
+          "id": "b_1778163612414",
+          "label": "Chrome",
+          "icon": "💻",
+          "color": "#16161f",
+          "action": {
+            "type": "app",
+            "value": "chrome"
+          }
         }
       ]
     },
