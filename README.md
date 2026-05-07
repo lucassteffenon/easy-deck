@@ -1,4 +1,5 @@
 <img width="1600" height="736" alt="easydeck" src="https://github.com/user-attachments/assets/24f7bdaf-21ec-4fa7-928a-deac5c32f9fc" />
+
 # MacroDeck — Controle Remoto via Celular
 
 Rode no PC → acesse do celular pelo Wi-Fi.
