@@ -1,6 +1,6 @@
 <img width="1600" height="736" alt="easydeck" src="https://github.com/user-attachments/assets/24f7bdaf-21ec-4fa7-928a-deac5c32f9fc" />
 
-# MacroDeck — Controle Remoto via Celular
+# EasyDeck — Controle Remoto via Celular
 
 Rode no PC → acesse do celular pelo Wi-Fi.
 
@@ -49,7 +49,7 @@ Vira um ícone como app, sem barra do browser.
 ## Estrutura
 
 ```
-macrodeck-server/
+easy-deck/
 ├── server.py          # FastAPI — rode no PC
 ├── requirements.txt
 ├── config/
