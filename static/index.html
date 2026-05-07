@@ -153,6 +153,20 @@ html, body {
 .settings-reset-btn { margin-top: 2px; padding-top: 10px; border-top: 1px solid var(--border); width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: none; color: var(--text-dim); font-size: 11px; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.15s; }
 .settings-reset-btn:active { background: var(--surface2); }
 
+/* ─── Sequence editor ───────────────────────────────── */
+#seq-steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.seq-step { background: var(--surface2); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.seq-step-header { display: flex; align-items: center; justify-content: space-between; }
+.seq-step-num { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.seq-step-remove { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 18px; padding: 0; line-height: 1; transition: color 0.1s; }
+.seq-step-remove:active { color: var(--danger); }
+.seq-delay-row { display: flex; align-items: center; gap: 8px; }
+.seq-delay-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); flex: 1; }
+.seq-delay-input { width: 76px; background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-size: 12px; padding: 5px 8px; font-family: 'JetBrains Mono', monospace; outline: none; -webkit-appearance: none; appearance: none; transition: border-color 0.15s; }
+.seq-delay-input:focus { border-color: var(--accent); }
+.seq-add-btn { width: 100%; padding: 11px; border-radius: 10px; border: 1.5px dashed var(--border2); background: none; color: var(--text-dim); font-size: 13px; cursor: pointer; transition: all 0.15s; font-family: 'Syne', sans-serif; }
+.seq-add-btn:active { background: var(--surface2); color: var(--text); }
+
 #page-tabs { flex: 0 0 100%; order: 4; display: flex; gap: 6px; padding: 10px 0 6px; overflow-x: auto; scrollbar-width: none; }
 #page-tabs::-webkit-scrollbar { display: none; }
 .page-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); color: var(--text-muted); background: none; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
@@ -468,6 +482,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
         <div class="field-label">Tipo de ação</div>
         <select class="field-input" id="ed-type" onchange="onTypeChange()">
           <option value="none">Nenhuma</option>
+          <option value="sequence">▶ Sequência de ações</option>
           <option value="script">Script / Comando shell</option>
           <option value="hotkey">Tecla de atalho</option>
           <option value="app">Abrir aplicativo</option>
@@ -481,6 +496,11 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
         <div class="field-label">Valor</div>
         <textarea class="field-input mono" id="ed-value" rows="2" placeholder="..."></textarea>
         <div class="action-hint" id="action-hint"></div>
+      </div>
+      <div id="sequence-editor" style="display:none">
+        <div class="field-label">Passos</div>
+        <div id="seq-steps"></div>
+        <button class="seq-add-btn" onclick="addSequenceStep()">+ Adicionar passo</button>
       </div>
     </div>
     <div class="sheet-actions">
@@ -501,8 +521,19 @@ let currentPageId = ''
 let editingId = null
 let editIcon = '⚡'
 let editSize = '1x1'
+let editSequenceSteps = []
 
-const ICONS = ['💻','🌐','🔊','🔇','🎵','🎬','🔴','📸','🔒','⚡','🚀','📋','📁','💾','🖥','⌨','🖱','📡','🔧','🎮','🎯','📊','📈','🔔','💬','✉','🏠','⭐','❤','🔥','🌙','☀','🎉','🤖','👾','🛡','⚙','🔑','🗑','➕','⏯','⏭','⏮','🔁','🔀']
+const SEQ_STEP_TYPES = [
+  ['script', 'Script / Comando'],
+  ['hotkey', 'Tecla de atalho'],
+  ['app', 'Abrir aplicativo'],
+  ['url', 'Abrir URL'],
+  ['media', 'Controle de mídia'],
+  ['obs', 'OBS WebSocket'],
+  ['spotify', 'Spotify'],
+]
+
+const ICONS =['💻','🌐','🔊','🔇','🎵','🎬','🔴','📸','🔒','⚡','🚀','📋','📁','💾','🖥','⌨','🖱','📡','🔧','🎮','🎯','📊','📈','🔔','💬','✉','🏠','⭐','❤','🔥','🌙','☀','🎉','🤖','👾','🛡','⚙','🔑','🗑','➕','⏯','⏭','⏮','🔁','🔀']
 const COLOR_PRESETS = ['#1a1a2e','#0d1b2a','#1a2e1a','#2e1a1a','#2e2a0a','#0a1a2e','#0a2e0a','#1a0a2e','#2e1a2e','#0f1923','#1f2937','#1e1b4b','#172554','#14532d','#1c1917']
 const ACTION_HINTS = {
   none: '',
@@ -681,7 +712,7 @@ function renderGrid() {
       style="--btn-bg: ${btn.color || '#16161f'}">
       <div class="btn-icon">${btn.icon || '⚡'}</div>
       <div class="btn-label">${btn.label || ''}</div>
-      <div class="btn-type-badge">${btn.action?.type || ''}</div>
+      <div class="btn-type-badge">${btn.action?.type === 'sequence' ? `seq×${btn.action.steps?.length || 0}` : (btn.action?.type || '')}</div>
     </div>
   `).join('') + `
     <div class="deck-btn-add" onclick="addBtn()">
@@ -713,17 +744,27 @@ function addPage() {
 }
 
 // ─── Execute ─────────────────────────────────────────
+const sleep = ms => new Promise(r => setTimeout(r, ms))
+
 async function executeBtn(id) {
   navigator.vibrate?.(30)
   const btn = currentPage()?.buttons.find(b => b.id === id)
   if (!btn) return
+  if (btn.action?.type === 'sequence') {
+    await executeSequence(id, btn.action.steps || [])
+  } else {
+    await executeSingle(id, btn.action)
+  }
+}
+
+async function executeSingle(id, action) {
   const el = document.getElementById(`dbtn-${id}`)
   el?.classList.add('running')
   try {
     const res = await fetch(`${serverUrl}/api/execute`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: btn.action }),
+      body: JSON.stringify({ action }),
       signal: AbortSignal.timeout(12000)
     })
     const data = await res.json()
@@ -737,6 +778,41 @@ async function executeBtn(id) {
     setTimeout(() => el?.classList.remove('err-flash'), 1000)
     toast('Erro: ' + e.message, 'err')
   }
+}
+
+async function executeSequence(id, steps) {
+  if (!steps.length) return
+  const el = document.getElementById(`dbtn-${id}`)
+  el?.classList.add('running')
+  let allOk = true
+
+  for (let i = 0; i < steps.length; i++) {
+    const step = steps[i]
+    try {
+      const res = await fetch(`${serverUrl}/api/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: { type: step.type, value: step.value } }),
+        signal: AbortSignal.timeout(12000)
+      })
+      const data = await res.json()
+      if (!data.ok) {
+        allOk = false
+        toast(`Passo ${i + 1} falhou: ${data.output?.slice(0, 60) || ''}`, 'err')
+        break
+      }
+    } catch (e) {
+      allOk = false
+      toast(`Passo ${i + 1}: ${e.message}`, 'err')
+      break
+    }
+    if (step.delay > 0 && i < steps.length - 1) await sleep(step.delay)
+  }
+
+  el?.classList.remove('running')
+  el?.classList.add(allOk ? 'ok-flash' : 'err-flash')
+  setTimeout(() => el?.classList.remove('ok-flash', 'err-flash'), 1000)
+  if (allOk) toast(`${steps.length} passo${steps.length > 1 ? 's' : ''} executado${steps.length > 1 ? 's' : ''}`, 'ok')
 }
 
 // ─── Unified interaction (tap / long-press / drag) ───
@@ -905,6 +981,9 @@ function openEditor(id) {
   document.getElementById('color-swatch').style.background = btn.color || '#16161f'
   document.getElementById('ed-type').value = btn.action?.type || 'none'
   document.getElementById('ed-value').value = btn.action?.value || ''
+  editSequenceSteps = btn.action?.type === 'sequence'
+    ? JSON.parse(JSON.stringify(btn.action.steps || []))
+    : []
   onTypeChange(); updateIconSelection(); updateSizeSelection()
   document.getElementById('sheet-overlay').classList.add('open')
 }
@@ -920,7 +999,10 @@ function saveBtn() {
   btn.label = document.getElementById('ed-label').value
   btn.color = document.getElementById('ed-color').value
   btn.size = editSize
-  btn.action = { type: document.getElementById('ed-type').value, value: document.getElementById('ed-value').value }
+  const type = document.getElementById('ed-type').value
+  btn.action = type === 'sequence'
+    ? { type: 'sequence', steps: JSON.parse(JSON.stringify(editSequenceSteps)) }
+    : { type, value: document.getElementById('ed-value').value }
   closeSheet(); renderGrid(); saveConfig()
   toast('Botão salvo!', 'ok')
 }
@@ -934,7 +1016,51 @@ function deleteBtn() {
 }
 
 function onTypeChange() {
-  document.getElementById('action-hint').textContent = ACTION_HINTS[document.getElementById('ed-type').value] || ''
+  const type = document.getElementById('ed-type').value
+  const isSeq = type === 'sequence'
+  document.getElementById('value-group').style.display = isSeq ? 'none' : ''
+  document.getElementById('sequence-editor').style.display = isSeq ? '' : 'none'
+  document.getElementById('action-hint').textContent = isSeq ? '' : (ACTION_HINTS[type] || '')
+  if (isSeq) renderSequenceSteps()
+}
+
+// ─── Sequence editor ─────────────────────────────────
+function renderSequenceSteps() {
+  const typeOpts = SEQ_STEP_TYPES.map(([val, label]) =>
+    `<option value="${val}">${label}</option>`
+  ).join('')
+
+  document.getElementById('seq-steps').innerHTML = editSequenceSteps.map((step, i) => `
+    <div class="seq-step">
+      <div class="seq-step-header">
+        <span class="seq-step-num">Passo ${i + 1}</span>
+        <button class="seq-step-remove" onclick="removeSequenceStep(${i})">×</button>
+      </div>
+      <select class="field-input" onchange="editSequenceSteps[${i}].type = this.value">
+        ${SEQ_STEP_TYPES.map(([val, label]) =>
+          `<option value="${val}" ${step.type === val ? 'selected' : ''}>${label}</option>`
+        ).join('')}
+      </select>
+      <textarea class="field-input mono" rows="1" placeholder="Valor..."
+        oninput="editSequenceSteps[${i}].value = this.value"
+      >${step.value || ''}</textarea>
+      <div class="seq-delay-row">
+        <span class="seq-delay-label">Aguardar depois (ms)</span>
+        <input class="seq-delay-input" type="number" value="${step.delay || 0}" min="0" max="30000" step="100"
+          oninput="editSequenceSteps[${i}].delay = +this.value">
+      </div>
+    </div>
+  `).join('')
+}
+
+function addSequenceStep() {
+  editSequenceSteps.push({ type: 'hotkey', value: '', delay: 0 })
+  renderSequenceSteps()
+}
+
+function removeSequenceStep(i) {
+  editSequenceSteps.splice(i, 1)
+  renderSequenceSteps()
 }
 
 // ─── Size ────────────────────────────────────────────
