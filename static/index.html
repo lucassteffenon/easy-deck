@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -14,6 +14,7 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
+/* ─── Themes ────────────────────────────────────────── */
 :root {
   --bg: #0a0a0f;
   --surface: #111118;
@@ -34,6 +35,23 @@
   --safe-top: env(safe-area-inset-top, 0px);
 }
 
+:root[data-theme="light"] {
+  --bg: #f0f0f6;
+  --surface: #ffffff;
+  --surface2: #e6e6f0;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.15);
+  --text: #1a1a2e;
+  --text-muted: #1a1a2e;
+  --text-dim: #8888a8;
+  --accent: #6c63ff;
+  --accent-glow: rgba(108,99,255,0.15);
+  --accent-dim: rgba(108,99,255,0.1);
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warn: #d97706;
+}
+
 html, body {
   height: 100%;
   overflow: hidden;
@@ -41,6 +59,7 @@ html, body {
   color: var(--text);
   font-family: 'Syne', sans-serif;
   overscroll-behavior: none;
+  transition: background 0.2s, color 0.2s;
 }
 
 /* ─── Screens ───────────────────────────────────────── */
@@ -51,275 +70,179 @@ html, body {
 #screen-connect {
   align-items: center;
   justify-content: center;
-  gap: 0;
   padding: 32px 24px;
   padding-top: calc(var(--safe-top) + 32px);
 }
-.connect-logo {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 4px;
-}
+.connect-logo { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
 .connect-logo span { color: var(--accent); }
-.connect-sub {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 40px;
-  font-family: 'JetBrains Mono', monospace;
-}
+.connect-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 40px; font-family: 'JetBrains Mono', monospace; }
 .connect-card {
-  width: 100%;
-  max-width: 360px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  width: 100%; max-width: 360px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 24px;
+  display: flex; flex-direction: column; gap: 16px;
 }
-.connect-label {
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 4px;
-}
+.connect-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
 .connect-input {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 16px;
-  padding: 12px 14px;
-  font-family: 'JetBrains Mono', monospace;
-  outline: none;
-  transition: border-color 0.15s;
+  width: 100%; background: var(--bg); border: 1px solid var(--border2);
+  border-radius: 10px; color: var(--text); font-size: 16px; padding: 12px 14px;
+  font-family: 'JetBrains Mono', monospace; outline: none; transition: border-color 0.15s;
 }
 .connect-input:focus { border-color: var(--accent); }
 .connect-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--accent);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: 'Syne', sans-serif;
-  cursor: pointer;
+  width: 100%; padding: 14px; background: var(--accent); border: none;
+  border-radius: 10px; color: #fff; font-size: 15px; font-weight: 700;
+  font-family: 'Syne', sans-serif; cursor: pointer;
   transition: opacity 0.15s, transform 0.1s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .connect-btn:active { opacity: 0.8; transform: scale(0.98); }
-.connect-status {
-  font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  text-align: center;
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
-}
+.connect-status { font-size: 12px; font-family: 'JetBrains Mono', monospace; text-align: center; padding: 10px; border-radius: 8px; display: none; }
 .connect-status.ok { background: rgba(34,197,94,0.12); color: var(--success); display: block; }
 .connect-status.err { background: rgba(239,68,68,0.12); color: var(--danger); display: block; }
-.connect-hint {
-  font-size: 11px;
-  color: var(--text-dim);
-  font-family: 'JetBrains Mono', monospace;
-  text-align: center;
-  line-height: 1.6;
+.connect-hint { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; text-align: center; line-height: 1.6; }
+
+@media (orientation: landscape) and (max-height: 520px) {
+  #screen-connect { flex-direction: row; gap: 32px; padding: 16px 32px; padding-top: calc(var(--safe-top) + 16px); }
+  .connect-sub { margin-bottom: 0; }
+  .connect-logo { font-size: 24px; }
+  .connect-card { padding: 16px; gap: 12px; }
 }
 
 /* ─── Deck screen ───────────────────────────────────── */
-#screen-deck {
-  padding-top: var(--safe-top);
-  padding-bottom: var(--safe-bottom);
-}
+#screen-deck { padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
 
-/* ─── Header ────────────────────────────────────────── */
-#deck-header {
-  padding: 12px 16px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* ─── Top bar ───────────────────────────────────────── */
+#top-bar {
   flex-shrink: 0;
+  display: flex; flex-wrap: wrap; align-items: center;
+  padding: 10px 16px 0; gap: 0 8px;
 }
-.header-logo {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
+.header-logo { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; flex-shrink: 0; order: 0; }
 .header-logo span { color: var(--accent); }
-.header-host {
-  font-size: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-dim);
-  flex: 1;
-}
-.header-conn-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--success);
-  flex-shrink: 0;
-}
+.header-host { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; order: 1; }
+.header-conn-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex-shrink: 0; order: 2; }
 .header-conn-dot.offline { background: var(--danger); }
+.theme-toggle {
+  background: none; border: 1px solid var(--border2); border-radius: 8px;
+  color: var(--text-dim); cursor: pointer; padding: 3px 8px; font-size: 13px;
+  flex-shrink: 0; transition: all 0.15s; order: 3; line-height: 1.4;
+}
+.theme-toggle:active { background: var(--surface2); }
 
-/* ─── Page tabs ─────────────────────────────────────── */
-#page-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 12px 16px 8px;
-  overflow-x: auto;
-  flex-shrink: 0;
-  scrollbar-width: none;
-}
+#page-tabs { flex: 0 0 100%; order: 4; display: flex; gap: 6px; padding: 10px 0 6px; overflow-x: auto; scrollbar-width: none; }
 #page-tabs::-webkit-scrollbar { display: none; }
-.page-tab {
-  flex-shrink: 0;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  background: none;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
+.page-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); color: var(--text-muted); background: none; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.page-tab.active { background: var(--accent-dim); border-color: rgba(108,99,255,0.3); color: var(--accent); }
+.page-tab-add { flex-shrink: 0; padding: 6px 12px; border-radius: 8px; font-size: 14px; border: 1px dashed var(--border); color: var(--text-dim); background: none; cursor: pointer; }
+
+@media (orientation: landscape) and (max-height: 520px) {
+  #top-bar { flex-wrap: nowrap; padding: 4px 12px; gap: 0 8px; border-bottom: 1px solid var(--border); }
+  .header-host { flex: 0 0 auto; max-width: 90px; }
+  #page-tabs { flex: 1; order: 2; padding: 0; min-width: 0; }
+  .header-conn-dot { order: 3; }
+  .theme-toggle { order: 4; }
+  .page-tab { padding: 4px 10px; font-size: 11px; }
+  .page-tab-add { padding: 4px 8px; font-size: 12px; }
 }
-.page-tab.active {
-  background: var(--accent-dim);
-  border-color: rgba(108,99,255,0.3);
-  color: var(--accent);
-}
-.page-tab-add {
-  flex-shrink: 0;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  border: 1px dashed var(--border);
-  color: var(--text-dim);
-  background: none;
-  cursor: pointer;
+
+@media (min-width: 1024px) {
+  #top-bar { padding: 12px 24px 0; max-width: 1280px; margin: 0 auto; width: 100%; }
 }
 
 /* ─── Button grid ───────────────────────────────────── */
 #btn-grid {
-  flex: 1 1 0;
-  min-height: 0;
-  width: 100%;
-  overflow-y: auto;
-  padding: 10px 12px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-  align-content: start;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media (orientation: landscape) and (max-height: 520px) {
-  #btn-grid {
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 7px;
-    padding: 6px 10px;
-  }
-  .btn-icon { font-size: 26px; }
-  .btn-label { font-size: 10px; }
-  #deck-header { padding: 6px 16px 0; }
-  #page-tabs { padding: 6px 16px 4px; }
+  flex: 1 1 0; min-height: 0; width: 100%;
+  overflow-y: auto; padding: 10px 12px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 10px; align-content: start;
+  overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
 }
 #btn-grid::-webkit-scrollbar { display: none; }
 
+@media (min-width: 400px) and (orientation: portrait) { #btn-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 600px) and (orientation: portrait) { #btn-grid { grid-template-columns: repeat(5, 1fr); padding: 12px 16px; gap: 12px; } }
+@media (orientation: landscape) and (max-height: 520px) { #btn-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; padding: 6px 10px; } }
+@media (min-width: 768px) and (orientation: landscape) and (min-height: 521px), (min-width: 900px) { #btn-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); padding: 12px 16px; gap: 12px; } }
+@media (min-width: 1024px) { #btn-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); max-width: 1280px; margin-left: auto; margin-right: auto; padding: 16px 24px; gap: 14px; } }
+
+/* ─── Deck buttons ──────────────────────────────────── */
 .deck-btn {
   aspect-ratio: 1;
   border-radius: var(--r);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
   background: var(--btn-bg, var(--surface2));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  position: relative;
-  overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; position: relative; overflow: hidden;
   cursor: pointer;
-  transition: transform 0.1s, border-color 0.2s;
-  -webkit-user-select: none;
-  user-select: none;
+  touch-action: none; /* required for pointer events drag on mobile */
+  -webkit-user-select: none; user-select: none;
+  transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+  will-change: transform;
 }
 
-.deck-btn:active { transform: scale(0.91); }
+/* Variable sizes */
+.deck-btn[data-size="2x1"] { grid-column: span 2; aspect-ratio: unset; }
+.deck-btn[data-size="1x2"] { grid-row: span 2; aspect-ratio: unset; }
+.deck-btn[data-size="2x2"] { grid-column: span 2; grid-row: span 2; aspect-ratio: unset; }
 
-/* Feedback de execução */
-.deck-btn::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 0;
-  transition: none;
+/* Drag states */
+.deck-btn.dragging {
+  opacity: 0.2;
+  transform: scale(0.93) !important;
+  border-style: dashed;
 }
-.deck-btn.running::after {
-  height: 3px;
-  background: var(--accent);
-  animation: progress 0.6s ease-out forwards;
+.deck-btn.drag-over {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent-glow) !important;
+  transform: scale(0.95) !important;
 }
-@keyframes progress {
-  from { width: 0; }
-  to { width: 100%; }
-}
+
+/* Execution feedback */
+.deck-btn:active:not(.dragging) { transform: scale(0.91); }
+.deck-btn::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 0; }
+.deck-btn.running::after { height: 3px; background: var(--accent); animation: progress 0.6s ease-out forwards; }
+@keyframes progress { from { width: 0; } to { width: 100%; } }
 .deck-btn.ok-flash { border-color: var(--success) !important; }
 .deck-btn.err-flash { border-color: var(--danger) !important; }
+.deck-btn.pressing { transform: scale(0.93); border-color: rgba(108,99,255,0.5); }
 
-/* Long press indicator */
-.deck-btn.pressing {
-  transform: scale(0.93);
-  border-color: rgba(108,99,255,0.5);
-  transition: transform 0.4s ease, border-color 0.4s ease;
-}
-
-.btn-icon { font-size: 40px; line-height: 1; pointer-events: none; }
+.btn-icon { font-size: 36px; line-height: 1; pointer-events: none; }
 .btn-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.80);
-  text-align: center;
-  padding: 0 8px;
-  line-height: 1.3;
-  pointer-events: none;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85);
+  text-align: center; padding: 0 8px; line-height: 1.3;
+  pointer-events: none; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.btn-type-badge {
-  position: absolute;
-  top: 5px; right: 5px;
-  font-size: 7px;
-  font-family: 'JetBrains Mono', monospace;
-  color: rgba(255,255,255,0.2);
-  text-transform: uppercase;
+.deck-btn[data-light-bg] .btn-label { color: rgba(0,0,0,0.75); }
+.btn-type-badge { position: absolute; top: 5px; right: 5px; font-size: 7px; font-family: 'JetBrains Mono', monospace; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+.deck-btn[data-light-bg] .btn-type-badge { color: rgba(0,0,0,0.20); }
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .btn-icon { font-size: 26px !important; }
+  .btn-label { font-size: 10px !important; }
+}
+
+/* Floating drag clone */
+.drag-clone {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  border-radius: var(--r);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; overflow: hidden;
+  transform: scale(1.08) rotate(1.5deg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.12);
+  opacity: 0.96;
+  will-change: left, top;
 }
 
 /* Add button */
 .deck-btn-add {
-  aspect-ratio: 1;
-  border-radius: var(--r);
+  aspect-ratio: 1; border-radius: var(--r);
   border: 1px dashed var(--border2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: border-color 0.15s;
-  background: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; cursor: pointer; transition: border-color 0.15s; background: none;
 }
 .deck-btn-add:active { background: var(--surface2); }
 .deck-btn-add-icon { font-size: 22px; color: var(--text-dim); }
@@ -327,193 +250,97 @@ html, body {
 
 /* ─── Toast ─────────────────────────────────────────── */
 #toast {
-  position: fixed;
-  bottom: calc(20px + var(--safe-bottom));
-  left: 50%;
+  position: fixed; bottom: calc(20px + var(--safe-bottom)); left: 50%;
   transform: translateX(-50%) translateY(80px);
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-muted);
-  z-index: 200;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  white-space: nowrap;
-  max-width: 90vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 10px 20px;
+  font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted);
+  z-index: 200; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap; max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
 }
 #toast.show { transform: translateX(-50%) translateY(0); }
 #toast.ok { color: var(--success); border-color: rgba(34,197,94,0.3); }
 #toast.err { color: var(--danger); border-color: rgba(239,68,68,0.3); }
 
-/* ─── Bottom sheet (editor) ─────────────────────────── */
+/* ─── Sheet / Modal ─────────────────────────────────── */
 #sheet-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 100;
-  display: none;
-  align-items: flex-end;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100;
+  display: none; align-items: flex-end;
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
 }
 #sheet-overlay.open { display: flex; }
 #sheet {
-  width: 100%;
-  max-height: 88vh;
-  background: var(--surface);
-  border-radius: 20px 20px 0 0;
+  width: 100%; max-height: 88vh;
+  background: var(--surface); border-radius: 20px 20px 0 0;
   border-top: 1px solid var(--border2);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  display: flex; flex-direction: column; overflow: hidden;
   transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.22s ease;
   padding-bottom: var(--safe-bottom);
 }
 #sheet-overlay.open #sheet { transform: translateY(0); }
-.sheet-handle {
-  width: 36px; height: 4px;
-  background: var(--border2);
-  border-radius: 2px;
-  margin: 12px auto 0;
-  flex-shrink: 0;
+
+@media (min-width: 640px) {
+  #sheet-overlay { align-items: center; justify-content: center; }
+  #sheet { max-width: 500px; width: 90%; max-height: 85vh; border-radius: 20px; border: 1px solid var(--border2); transform: scale(0.94); opacity: 0; padding-bottom: 0; }
+  #sheet-overlay.open #sheet { transform: scale(1); opacity: 1; }
+  .sheet-handle { display: none; }
 }
-.sheet-title {
-  font-size: 16px;
-  font-weight: 700;
-  padding: 12px 20px 8px;
-  flex-shrink: 0;
-}
-.sheet-body {
-  overflow-y: auto;
-  padding: 4px 20px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  -webkit-overflow-scrolling: touch;
-}
+
+.sheet-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 12px auto 0; flex-shrink: 0; }
+.sheet-title { font-size: 16px; font-weight: 700; padding: 12px 20px 8px; flex-shrink: 0; }
+.sheet-body { overflow-y: auto; padding: 4px 20px 16px; display: flex; flex-direction: column; gap: 14px; -webkit-overflow-scrolling: touch; }
 .sheet-body::-webkit-scrollbar { display: none; }
 
-.field-label {
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 6px;
-}
+.field-label { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
 .field-input {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 15px;
-  padding: 11px 14px;
-  font-family: 'Syne', sans-serif;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: border-color 0.15s;
+  width: 100%; background: var(--bg); border: 1px solid var(--border2);
+  border-radius: 10px; color: var(--text); font-size: 15px; padding: 11px 14px;
+  font-family: 'Syne', sans-serif; outline: none;
+  -webkit-appearance: none; appearance: none; transition: border-color 0.15s;
 }
 .field-input:focus { border-color: var(--accent); }
 .field-input.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
 select.field-input { cursor: pointer; }
 textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
 
-.icon-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 4px;
-  margin-bottom: 8px;
-}
-.icon-opt {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1.5px solid transparent;
-  transition: all 0.1s;
-  background: none;
-}
+.icon-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-bottom: 8px; }
+.icon-opt { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 8px; cursor: pointer; border: 1.5px solid transparent; transition: all 0.1s; background: none; }
 .icon-opt:active { background: var(--surface2); }
 .icon-opt.selected { border-color: var(--accent); background: var(--accent-dim); }
 
-.color-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.color-swatch {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  border: 1px solid var(--border2);
-  overflow: hidden;
-  flex-shrink: 0;
-  position: relative;
-}
-.color-swatch input[type="color"] {
-  position: absolute;
-  inset: -4px;
-  width: calc(100% + 8px);
-  height: calc(100% + 8px);
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
-}
-.color-presets {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.color-dot {
-  width: 28px; height: 28px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.1);
-  flex-shrink: 0;
-  transition: transform 0.1s;
-}
+.color-row { display: flex; align-items: center; gap: 8px; }
+.color-swatch { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border2); overflow: hidden; flex-shrink: 0; position: relative; }
+.color-swatch input[type="color"] { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); cursor: pointer; border: none; background: none; padding: 0; }
+.color-presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.color-dot { width: 28px; height: 28px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; transition: transform 0.1s; }
 .color-dot:active { transform: scale(1.2); }
 
-.action-hint {
-  font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-muted);
-  background: var(--surface2);
-  border-radius: 8px;
-  padding: 10px 12px;
-  line-height: 1.8;
-  white-space: pre-wrap;
+.size-picker { display: flex; gap: 6px; }
+.size-opt {
+  flex: 1; padding: 9px 4px;
+  border: 1.5px solid var(--border2); border-radius: 10px;
+  background: var(--bg); color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  cursor: pointer; transition: all 0.12s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
+.size-opt:active { background: var(--surface2); }
+.size-opt.selected { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+.size-preview { display: grid; gap: 2px; }
+.size-preview span { background: currentColor; border-radius: 2px; opacity: 0.5; display: block; width: 10px; height: 10px; }
+.size-opt.selected .size-preview span { opacity: 0.9; }
+.size-preview.s11 { grid-template-columns: 1fr; }
+.size-preview.s21 { grid-template-columns: 1fr 1fr; }
+.size-preview.s12 { grid-template-columns: 1fr; }
+.size-preview.s12 span { height: 22px; }
+.size-preview.s22 { grid-template-columns: 1fr 1fr; }
+.size-preview.s22 span { height: 10px; }
 
-.sheet-actions {
-  display: flex;
-  gap: 8px;
-  padding: 12px 20px 4px;
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.sheet-btn {
-  flex: 1;
-  padding: 13px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 700;
-  font-family: 'Syne', sans-serif;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: none;
-  color: var(--text-muted);
-  transition: all 0.15s;
-}
+.action-hint { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: var(--surface2); border-radius: 8px; padding: 10px 12px; line-height: 1.8; white-space: pre-wrap; }
+
+.sheet-actions { display: flex; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.sheet-btn { flex: 1; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 700; font-family: 'Syne', sans-serif; cursor: pointer; border: 1px solid var(--border2); background: none; color: var(--text-muted); transition: all 0.15s; }
 .sheet-btn:active { opacity: 0.7; }
 .sheet-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .sheet-btn.danger { color: var(--danger); border-color: rgba(239,68,68,0.2); }
@@ -526,7 +353,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
 <div id="screen-connect" class="screen">
   <div class="connect-logo">Easy<span>Deck</span></div>
   <div class="connect-sub">controle remoto do seu PC</div>
-
   <div class="connect-card">
     <div>
       <div class="connect-label">Endereço do servidor</div>
@@ -534,31 +360,25 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
         placeholder="http://192.168.1.100:7777"
         inputmode="url" autocomplete="off" autocorrect="off" spellcheck="false">
     </div>
-    <button class="connect-btn" onclick="tryConnect()">
-      <span>Conectar</span>
-    </button>
+    <button class="connect-btn" onclick="tryConnect()"><span>Conectar</span></button>
     <div class="connect-status" id="connect-status"></div>
-    <div class="connect-hint">
-      Rode server.py no seu PC.<br>
-      O IP aparece no terminal ao iniciar.
-    </div>
+    <div class="connect-hint">Rode server.py no seu PC.<br>O IP aparece no terminal ao iniciar.</div>
   </div>
 </div>
 
 <!-- ─── Deck screen ────────────────────────────────── -->
 <div id="screen-deck" class="screen hidden">
-  <div id="deck-header">
+  <div id="top-bar">
     <div class="header-logo">Easy<span>Deck</span></div>
     <div class="header-host" id="header-host"></div>
     <div class="header-conn-dot" id="conn-dot"></div>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀</button>
+    <div id="page-tabs"></div>
   </div>
-
-  <div id="page-tabs"></div>
-
   <div id="btn-grid"></div>
 </div>
 
-<!-- ─── Bottom sheet editor ───────────────────────── -->
+<!-- ─── Bottom sheet / modal editor ──────────────── -->
 <div id="sheet-overlay" onclick="closeSheetOverlay(event)">
   <div id="sheet">
     <div class="sheet-handle"></div>
@@ -567,12 +387,28 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
       <div>
         <div class="field-label">Ícone</div>
         <div class="icon-grid" id="icon-grid"></div>
-        <input class="field-input" id="ed-icon" placeholder="Emoji personalizado..."
-          oninput="setIconCustom(this.value)">
+        <input class="field-input" id="ed-icon" placeholder="Emoji personalizado..." oninput="setIconCustom(this.value)">
       </div>
       <div>
         <div class="field-label">Label</div>
         <input class="field-input" id="ed-label" placeholder="Nome do botão">
+      </div>
+      <div>
+        <div class="field-label">Tamanho</div>
+        <div class="size-picker">
+          <button class="size-opt" data-size="1x1" onclick="pickSize('1x1')">
+            <div class="size-preview s11"><span></span></div>1×1
+          </button>
+          <button class="size-opt" data-size="2x1" onclick="pickSize('2x1')">
+            <div class="size-preview s21"><span></span><span></span></div>2×1
+          </button>
+          <button class="size-opt" data-size="1x2" onclick="pickSize('1x2')">
+            <div class="size-preview s12"><span></span></div>1×2
+          </button>
+          <button class="size-opt" data-size="2x2" onclick="pickSize('2x2')">
+            <div class="size-preview s22"><span></span><span></span><span></span><span></span></div>2×2
+          </button>
+        </div>
       </div>
       <div>
         <div class="field-label">Cor</div>
@@ -610,7 +446,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.5; }
   </div>
 </div>
 
-<!-- ─── Toast ─────────────────────────────────────── -->
 <div id="toast"></div>
 
 <script>
@@ -620,13 +455,10 @@ let config = { pages: [], currentPage: '' }
 let currentPageId = ''
 let editingId = null
 let editIcon = '⚡'
-let lpTimer = null
-let lpFired = false
+let editSize = '1x1'
 
 const ICONS = ['💻','🌐','🔊','🔇','🎵','🎬','🔴','📸','🔒','⚡','🚀','📋','📁','💾','🖥','⌨','🖱','📡','🔧','🎮','🎯','📊','📈','🔔','💬','✉','🏠','⭐','❤','🔥','🌙','☀','🎉','🤖','👾','🛡','⚙','🔑','🗑','➕','⏯','⏭','⏮','🔁','🔀']
-
 const COLOR_PRESETS = ['#1a1a2e','#0d1b2a','#1a2e1a','#2e1a1a','#2e2a0a','#0a1a2e','#0a2e0a','#1a0a2e','#2e1a2e','#0f1923','#1f2937','#1e1b4b','#172554','#14532d','#1c1917']
-
 const ACTION_HINTS = {
   none: '',
   script: 'Ex:\necho "hello world"\npython3 /home/user/script.py\nnpm run build',
@@ -640,14 +472,33 @@ const ACTION_HINTS = {
 
 // ─── Init ────────────────────────────────────────────
 function init() {
+  initTheme()
   buildIconGrid()
   buildColorPresets()
-  setupLongPress()
+  setupInteraction()
+
   const saved = localStorage.getItem('easydeck-server')
   if (saved) document.getElementById('server-url').value = saved
   document.getElementById('server-url').addEventListener('keydown', e => {
     if (e.key === 'Enter') tryConnect()
   })
+
+  window.addEventListener('resize', updateGridRowHeight)
+  window.addEventListener('orientationchange', () => setTimeout(updateGridRowHeight, 150))
+}
+
+// ─── Theme ───────────────────────────────────────────
+function initTheme() {
+  applyTheme(localStorage.getItem('easydeck-theme') || 'dark')
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme)
+  document.getElementById('theme-toggle').textContent = theme === 'dark' ? '☀' : '🌙'
+}
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+  applyTheme(next)
+  localStorage.setItem('easydeck-theme', next)
 }
 
 // ─── Connect ─────────────────────────────────────────
@@ -655,12 +506,10 @@ async function tryConnect() {
   const input = document.getElementById('server-url').value.trim()
   const url = input.endsWith('/') ? input.slice(0, -1) : input
   if (!url) return
-
   const status = document.getElementById('connect-status')
   status.textContent = 'Conectando...'
   status.className = 'connect-status ok'
   status.style.display = 'block'
-
   try {
     const res = await fetch(`${url}/api/config`, { signal: AbortSignal.timeout(5000) })
     if (!res.ok) throw new Error('Servidor retornou ' + res.status)
@@ -679,50 +528,47 @@ async function tryConnect() {
 function goToDeck() {
   document.getElementById('screen-connect').classList.add('hidden')
   document.getElementById('screen-deck').classList.remove('hidden')
-  const sys = document.getElementById('header-host')
-  sys.textContent = serverUrl.replace('http://', '')
+  document.getElementById('header-host').textContent = serverUrl.replace('http://', '')
   renderDeck()
   startHeartbeat()
 }
 
-// ─── Heartbeat ───────────────────────────────────────
 async function startHeartbeat() {
   const dot = document.getElementById('conn-dot')
   setInterval(async () => {
     try {
       await fetch(`${serverUrl}/api/system`, { signal: AbortSignal.timeout(2000) })
       dot.className = 'header-conn-dot'
-    } catch {
-      dot.className = 'header-conn-dot offline'
-    }
+    } catch { dot.className = 'header-conn-dot offline' }
   }, 5000)
 }
 
 // ─── Render ──────────────────────────────────────────
-function renderDeck() {
-  renderTabs()
-  renderGrid()
-}
-
-function currentPage() {
-  return config.pages.find(p => p.id === currentPageId) || config.pages[0]
-}
+function renderDeck() { renderTabs(); renderGrid() }
+function currentPage() { return config.pages.find(p => p.id === currentPageId) || config.pages[0] }
 
 function renderTabs() {
-  const tabs = document.getElementById('page-tabs')
-  tabs.innerHTML = config.pages.map(p => `
-    <button class="page-tab ${p.id === currentPageId ? 'active' : ''}"
-      onclick="switchPage('${p.id}')">${p.name}</button>
-  `).join('') + `<button class="page-tab-add" onclick="addPage()">+</button>`
+  document.getElementById('page-tabs').innerHTML =
+    config.pages.map(p =>
+      `<button class="page-tab ${p.id === currentPageId ? 'active' : ''}" onclick="switchPage('${p.id}')">${p.name}</button>`
+    ).join('') + `<button class="page-tab-add" onclick="addPage()">+</button>`
+}
+
+function isLightColor(hex) {
+  const h = (hex || '#16161f').replace('#', '')
+  const r = parseInt(h.slice(0, 2), 16)
+  const g = parseInt(h.slice(2, 4), 16)
+  const b = parseInt(h.slice(4, 6), 16)
+  return (r * 299 + g * 587 + b * 114) / 1000 > 140
 }
 
 function renderGrid() {
   const grid = document.getElementById('btn-grid')
   const page = currentPage()
   if (!page) return
-
   grid.innerHTML = page.buttons.map(btn => `
-    <div class="deck-btn" id="dbtn-${btn.id}" data-id="${btn.id}"
+    <div class="deck-btn" id="dbtn-${btn.id}" data-id="${btn.id}" data-size="${btn.size || '1x1'}"
+      ${isLightColor(btn.color) ? 'data-light-bg' : ''}
       style="--btn-bg: ${btn.color || '#16161f'}">
       <div class="btn-icon">${btn.icon || '⚡'}</div>
       <div class="btn-label">${btn.label || ''}</div>
@@ -732,33 +578,37 @@ function renderGrid() {
     <div class="deck-btn-add" onclick="addBtn()">
       <div class="deck-btn-add-icon">＋</div>
       <div class="deck-btn-add-text">novo</div>
-    </div>
-  `
+    </div>`
+  updateGridRowHeight()
 }
 
-function switchPage(id) {
-  currentPageId = id
-  renderDeck()
+function updateGridRowHeight() {
+  const grid = document.getElementById('btn-grid')
+  if (!grid?.clientWidth) return
+  const style = getComputedStyle(grid)
+  const cols = style.gridTemplateColumns.split(' ').length
+  const gap = parseFloat(style.columnGap) || 10
+  const paddingH = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+  const colWidth = (grid.clientWidth - paddingH - gap * (cols - 1)) / cols
+  if (colWidth > 0) grid.style.gridAutoRows = Math.round(colWidth) + 'px'
 }
 
+function switchPage(id) { currentPageId = id; renderDeck() }
 function addPage() {
   const name = prompt('Nome da nova página:')
   if (!name) return
   const id = 'p_' + Date.now()
   config.pages.push({ id, name, buttons: [] })
   currentPageId = id
-  renderDeck()
-  saveConfig()
+  renderDeck(); saveConfig()
 }
 
 // ─── Execute ─────────────────────────────────────────
 async function executeBtn(id) {
   navigator.vibrate?.(30)
-  const page = currentPage()
-  const btn = page?.buttons.find(b => b.id === id)
+  const btn = currentPage()?.buttons.find(b => b.id === id)
   if (!btn) return
   const el = document.getElementById(`dbtn-${id}`)
-
   el?.classList.add('running')
   try {
     const res = await fetch(`${serverUrl}/api/execute`, {
@@ -780,46 +630,75 @@ async function executeBtn(id) {
   }
 }
 
-// ─── Long press ──────────────────────────────────────
-function setupLongPress() {
+// ─── Unified interaction (tap / long-press / drag) ───
+function setupInteraction() {
   const grid = document.getElementById('btn-grid')
+  let state = null // { id, el, pointerId, startX, startY, dragStarted, clone, dropTargetId, offsetX, offsetY, editTimer }
 
-  grid.addEventListener('touchstart', e => {
+  grid.addEventListener('pointerdown', e => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return
     const btn = e.target.closest('.deck-btn[data-id]')
     if (!btn) return
-    lpFired = false
-    btn.classList.add('pressing')
-    lpTimer = setTimeout(() => {
-      lpFired = true
-      btn.classList.remove('pressing')
-      navigator.vibrate?.(60)
-      openEditor(btn.dataset.id)
-    }, 500)
+
+    state = {
+      id: btn.dataset.id,
+      el: btn,
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      dragStarted: false,
+      clone: null,
+      dropTargetId: null,
+      offsetX: 0,
+      offsetY: 0,
+      editTimer: setTimeout(() => {
+        if (state && !state.dragStarted) {
+          const id = state.id
+          state = null
+          navigator.vibrate?.(60)
+          btn.classList.add('pressing')
+          setTimeout(() => btn.classList.remove('pressing'), 200)
+          openEditor(id)
+        }
+      }, 500)
+    }
   }, { passive: true })
 
-  const cancel = e => {
-    clearTimeout(lpTimer)
-    e.target.closest?.('.deck-btn[data-id]')?.classList.remove('pressing')
-  }
-  grid.addEventListener('touchmove', cancel, { passive: true })
-  grid.addEventListener('touchcancel', cancel, { passive: true })
-
-  grid.addEventListener('touchend', e => {
-    clearTimeout(lpTimer)
-    const btn = e.target.closest('.deck-btn[data-id]')
-    if (!btn) return
-    btn.classList.remove('pressing')
-    if (lpFired) return
-    e.preventDefault()
-    executeBtn(btn.dataset.id)
-  }, { passive: false })
-
-  // desktop fallback
-  grid.addEventListener('click', e => {
-    if (lpFired) { lpFired = false; return }
-    const btn = e.target.closest('.deck-btn[data-id]')
-    if (btn) executeBtn(btn.dataset.id)
+  document.addEventListener('pointermove', e => {
+    if (!state || e.pointerId !== state.pointerId) return
+    const dist = Math.hypot(e.clientX - state.startX, e.clientY - state.startY)
+    if (!state.dragStarted) {
+      if (dist < 8) return
+      clearTimeout(state.editTimer)
+      state.dragStarted = true
+      const rect = state.el.getBoundingClientRect()
+      state.offsetX = state.startX - rect.left
+      state.offsetY = state.startY - rect.top
+      try { state.el.setPointerCapture(e.pointerId) } catch (_) {}
+      beginDrag(state, rect)
+    }
+    moveDrag(state, e)
   })
+
+  document.addEventListener('pointerup', e => {
+    if (!state || e.pointerId !== state.pointerId) return
+    clearTimeout(state.editTimer)
+    if (state.dragStarted) {
+      finishDrag(state)
+    } else {
+      executeBtn(state.id)
+    }
+    state = null
+  })
+
+  document.addEventListener('pointercancel', e => {
+    if (!state || e.pointerId !== state.pointerId) return
+    clearTimeout(state.editTimer)
+    if (state.dragStarted) cancelDrag(state)
+    state = null
+  })
+
+  // Desktop right-click → edit
   grid.addEventListener('contextmenu', e => {
     const btn = e.target.closest('.deck-btn[data-id]')
     if (!btn) return
@@ -828,57 +707,112 @@ function setupLongPress() {
   })
 }
 
-// ─── Editor (bottom sheet) ───────────────────────────
+function beginDrag(state, rect) {
+  navigator.vibrate?.(25)
+  state.el.classList.add('dragging')
+
+  // Clone preserves --btn-bg inline style
+  const clone = state.el.cloneNode(true)
+  clone.removeAttribute('id')
+  clone.classList.add('drag-clone')
+  clone.classList.remove('dragging', 'pressing', 'running', 'ok-flash', 'err-flash')
+  // Reset grid spans so the clone is its natural size
+  clone.style.gridColumn = 'unset'
+  clone.style.gridRow = 'unset'
+  clone.style.width = rect.width + 'px'
+  clone.style.height = rect.height + 'px'
+  clone.style.left = rect.left + 'px'
+  clone.style.top = rect.top + 'px'
+  document.body.appendChild(clone)
+  state.clone = clone
+}
+
+function moveDrag(state, e) {
+  const x = e.clientX - state.offsetX
+  const y = e.clientY - state.offsetY
+  state.clone.style.left = x + 'px'
+  state.clone.style.top = y + 'px'
+
+  // Hide clone briefly to hit-test the element underneath
+  state.clone.style.visibility = 'hidden'
+  const under = document.elementFromPoint(e.clientX, e.clientY)
+  state.clone.style.visibility = ''
+
+  const target = under?.closest('.deck-btn[data-id]')
+  document.querySelectorAll('.deck-btn.drag-over').forEach(b => b.classList.remove('drag-over'))
+  if (target && target.dataset.id !== state.id) {
+    target.classList.add('drag-over')
+    state.dropTargetId = target.dataset.id
+  } else {
+    state.dropTargetId = null
+  }
+}
+
+function finishDrag(state) {
+  state.clone?.remove()
+  state.el.classList.remove('dragging')
+  document.querySelectorAll('.deck-btn.drag-over').forEach(b => b.classList.remove('drag-over'))
+
+  if (state.dropTargetId) {
+    const page = currentPage()
+    if (!page) return
+    const btns = page.buttons
+    const fromIdx = btns.findIndex(b => b.id === state.id)
+    const toIdx = btns.findIndex(b => b.id === state.dropTargetId)
+    if (fromIdx !== -1 && toIdx !== -1 && fromIdx !== toIdx) {
+      const [moved] = btns.splice(fromIdx, 1)
+      btns.splice(toIdx, 0, moved)
+      renderGrid()
+      saveConfig()
+    }
+  }
+}
+
+function cancelDrag(state) {
+  state.clone?.remove()
+  state.el.classList.remove('dragging')
+  document.querySelectorAll('.deck-btn.drag-over').forEach(b => b.classList.remove('drag-over'))
+}
+
+// ─── Editor ──────────────────────────────────────────
 function addBtn() {
   const page = currentPage()
   if (!page) return
   const id = 'b_' + Date.now()
-  page.buttons.push({ id, label: 'Novo', icon: '⚡', color: '#16161f', action: { type: 'none', value: '' } })
+  page.buttons.push({ id, label: 'Novo', icon: '⚡', color: '#16161f', size: '1x1', action: { type: 'none', value: '' } })
   renderGrid()
   openEditor(id)
 }
 
 function openEditor(id) {
-  const page = currentPage()
-  const btn = page?.buttons.find(b => b.id === id)
+  const btn = currentPage()?.buttons.find(b => b.id === id)
   if (!btn) return
   editingId = id
   editIcon = btn.icon || '⚡'
+  editSize = btn.size || '1x1'
   document.getElementById('ed-label').value = btn.label || ''
   document.getElementById('ed-icon').value = btn.icon || ''
   document.getElementById('ed-color').value = btn.color || '#16161f'
   document.getElementById('color-swatch').style.background = btn.color || '#16161f'
   document.getElementById('ed-type').value = btn.action?.type || 'none'
   document.getElementById('ed-value').value = btn.action?.value || ''
-  onTypeChange()
-  updateIconSelection()
+  onTypeChange(); updateIconSelection(); updateSizeSelection()
   document.getElementById('sheet-overlay').classList.add('open')
 }
 
-function closeSheet() {
-  document.getElementById('sheet-overlay').classList.remove('open')
-  editingId = null
-}
-
-function closeSheetOverlay(e) {
-  if (e.target === document.getElementById('sheet-overlay')) closeSheet()
-}
+function closeSheet() { document.getElementById('sheet-overlay').classList.remove('open'); editingId = null }
+function closeSheetOverlay(e) { if (e.target === document.getElementById('sheet-overlay')) closeSheet() }
 
 function saveBtn() {
   if (!editingId) return
-  const page = currentPage()
-  const btn = page?.buttons.find(b => b.id === editingId)
+  const btn = currentPage()?.buttons.find(b => b.id === editingId)
   if (!btn) return
   btn.icon = editIcon
   btn.label = document.getElementById('ed-label').value
   btn.color = document.getElementById('ed-color').value
-  btn.action = {
-    type: document.getElementById('ed-type').value,
-    value: document.getElementById('ed-value').value
-  }
-  closeSheet()
-  renderGrid()
-  saveConfig()
+  btn.size = editSize
+  btn.action = { type: document.getElementById('ed-type').value, value: document.getElementById('ed-value').value }
+  closeSheet(); renderGrid(); saveConfig()
   toast('Botão salvo!', 'ok')
 }
 
@@ -887,74 +821,53 @@ function deleteBtn() {
   const page = currentPage()
   if (!page) return
   page.buttons = page.buttons.filter(b => b.id !== editingId)
-  closeSheet()
-  renderGrid()
-  saveConfig()
+  closeSheet(); renderGrid(); saveConfig()
 }
 
 function onTypeChange() {
-  const type = document.getElementById('ed-type').value
-  document.getElementById('action-hint').textContent = ACTION_HINTS[type] || ''
+  document.getElementById('action-hint').textContent = ACTION_HINTS[document.getElementById('ed-type').value] || ''
+}
+
+// ─── Size ────────────────────────────────────────────
+function pickSize(size) { editSize = size; updateSizeSelection() }
+function updateSizeSelection() {
+  document.querySelectorAll('.size-opt').forEach(el => el.classList.toggle('selected', el.dataset.size === editSize))
 }
 
 // ─── Color ───────────────────────────────────────────
-function onColorChange(val) {
-  document.getElementById('color-swatch').style.background = val
-}
-
+function onColorChange(val) { document.getElementById('color-swatch').style.background = val }
 function buildColorPresets() {
   document.getElementById('color-presets').innerHTML = COLOR_PRESETS.map(c =>
-    `<div class="color-dot" style="background:${c}" onclick="pickColor('${c}')"></div>`
-  ).join('')
+    `<div class="color-dot" style="background:${c}" onclick="pickColor('${c}')"></div>`).join('')
 }
-
-function pickColor(c) {
-  document.getElementById('ed-color').value = c
-  document.getElementById('color-swatch').style.background = c
-}
+function pickColor(c) { document.getElementById('ed-color').value = c; document.getElementById('color-swatch').style.background = c }
 
 // ─── Icon ────────────────────────────────────────────
 function buildIconGrid() {
   document.getElementById('icon-grid').innerHTML = ICONS.map(i =>
-    `<button class="icon-opt" onclick="pickIcon('${i}')">${i}</button>`
-  ).join('')
+    `<button class="icon-opt" onclick="pickIcon('${i}')">${i}</button>`).join('')
 }
-
-function pickIcon(icon) {
-  editIcon = icon
-  document.getElementById('ed-icon').value = icon
-  updateIconSelection()
-}
-
-function setIconCustom(val) {
-  if (val.trim()) { editIcon = val.trim(); updateIconSelection() }
-}
-
+function pickIcon(icon) { editIcon = icon; document.getElementById('ed-icon').value = icon; updateIconSelection() }
+function setIconCustom(val) { if (val.trim()) { editIcon = val.trim(); updateIconSelection() } }
 function updateIconSelection() {
-  document.querySelectorAll('.icon-opt').forEach(el => {
-    el.classList.toggle('selected', el.textContent === editIcon)
-  })
+  document.querySelectorAll('.icon-opt').forEach(el => el.classList.toggle('selected', el.textContent === editIcon))
 }
 
 // ─── Save config ─────────────────────────────────────
 async function saveConfig() {
   try {
     await fetch(`${serverUrl}/api/config`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(config)
     })
-  } catch (e) {
-    toast('Erro ao salvar: ' + e.message, 'err')
-  }
+  } catch (e) { toast('Erro ao salvar: ' + e.message, 'err') }
 }
 
 // ─── Toast ───────────────────────────────────────────
 let toastTimer = null
 function toast(msg, type = 'info') {
   const el = document.getElementById('toast')
-  el.textContent = msg
-  el.className = `show ${type}`
+  el.textContent = msg; el.className = `show ${type}`
   clearTimeout(toastTimer)
   toastTimer = setTimeout(() => el.classList.remove('show'), 2500)
 }

@@ -5,6 +5,16 @@
       "name": "Principal",
       "buttons": [
         {
+          "id": "4",
+          "label": "Volume -",
+          "icon": "🔇",
+          "color": "#b4a2a2",
+          "action": {
+            "type": "media",
+            "value": "volume_down"
+          }
+        },
+        {
           "id": "1",
           "label": "Bloco de notas",
           "icon": "📝",
@@ -32,16 +42,6 @@
           "action": {
             "type": "media",
             "value": "volume_up"
-          }
-        },
-        {
-          "id": "4",
-          "label": "Volume -",
-          "icon": "🔇",
-          "color": "#2e1a1a",
-          "action": {
-            "type": "media",
-            "value": "volume_down"
           }
         },
         {
@@ -75,6 +75,16 @@
           }
         },
         {
+          "id": "b_1778163612414",
+          "label": "Chrome",
+          "icon": "💻",
+          "color": "#16161f",
+          "action": {
+            "type": "app",
+            "value": "chrome"
+          }
+        },
+        {
           "id": "8",
           "label": "Screenshot",
           "icon": "📸",
@@ -92,16 +102,6 @@
           "action": {
             "type": "none",
             "value": ""
-          }
-        },
-        {
-          "id": "b_1778163612414",
-          "label": "Chrome",
-          "icon": "💻",
-          "color": "#16161f",
-          "action": {
-            "type": "app",
-            "value": "chrome"
           }
         }
       ]
